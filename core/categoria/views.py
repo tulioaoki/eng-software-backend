@@ -9,7 +9,7 @@ from core.utils.utilities import default_response, custom_filter
 
 
 class Categorias(APIView):
-    permission_classes = (IsAuthenticated, AllowAny)
+    permission_classes = (AllowAny,)
     http_method_names = ['get', 'post',]
 
     def get_objects(self, request):
@@ -51,7 +51,7 @@ class Categorias(APIView):
 
 
 class CategoriaDetail(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     http_method_names = ['get', 'delete']
 
     def get_object(self,pk):

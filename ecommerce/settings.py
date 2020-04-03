@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'core',
     'core.produto',
     'core.categoria',
-    'core.user'
+    'core.user',
+    'core.accounts',
+    'core.loginAndRegister'
 ]
 
 MIDDLEWARE = [
@@ -73,6 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

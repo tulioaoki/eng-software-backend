@@ -1,7 +1,7 @@
 from django.core import serializers
 from rest_framework import status
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,7 +11,7 @@ from core.utils.utilities import default_response, custom_filter
 
 
 class Produtos(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     http_method_names = ['get', 'post',]
 
     def get_objects(self, request):
@@ -53,7 +53,7 @@ class Produtos(APIView):
 
 
 class ProdutoDetail(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     http_method_names = ['get', 'delete']
 
     def get_object(self,pk):
