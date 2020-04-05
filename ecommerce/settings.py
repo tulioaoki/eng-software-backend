@@ -35,10 +35,11 @@ INSTALLED_APPS = [
     'ecommerce',
     'core',
     'core.produto',
+    'core.purchases',
     'core.categoria',
     'core.user',
     'core.accounts',
-    'core.loginAndRegister'
+    'core.loginAndRegister',
 ]
 
 MIDDLEWARE = [

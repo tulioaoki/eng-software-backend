@@ -1,9 +1,8 @@
 from django.http import Http404
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-from rest_framework import permissions
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from core.accounts.models import CustomUser
 from core.accounts.serializers import UserSerializer, UserInfoSerializer, \
@@ -32,7 +31,6 @@ class UserCreate(APIView):
                                                  success=False,
                                                  message='User nao criado com successo.',
                                                  data=serializer.error_messages),status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class ViewAllUsers(APIView):
@@ -113,6 +111,7 @@ class MyProfile(APIView):
                                          message='User retornado com successo.',
                                          data=serializer.data,
                                          ), status=status.HTTP_200_OK)
+
     def put(self, request, format=None):
         objects = self.get_object()
         serializer = UserSerializer(objects, data=request.data, partial=True)
@@ -219,6 +218,5 @@ class UserRole(APIView):
 
     def get(self, request, format=None):
         role = self.get_object(request)
-        resp = {}
-        resp['role'] = role
+        resp = {'role': role}
         return Response(resp, status=status.HTTP_200_OK)

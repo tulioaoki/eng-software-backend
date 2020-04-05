@@ -1,22 +1,39 @@
 from rest_framework import serializers
-
 from core.categoria.models import Category
 from core.categoria.serializers import CategorySerializer
-from core.produto.models import Product
+from core.produto.models import Product, ProductImage
+
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ["id", "image_url", "created_at", "updated_at", ]
+
+    def create(self, validated_data):
+        product_image = ProductImage.objects.create(
+            image_url=validated_data.get('image_url'),
+        )
+        return product_image
+
+    def update(self, instance, validated_data):
+        instance.image_url = validated_data.get('image_url', instance.image_url)
+        instance.save()
+        return instance
 
 
 class ProductSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(read_only=True, many=True)
+    images = ProductImageSerializer(read_only=True, many=True)
 
     class Meta:
         model = Product
         
-        fields = ["id", "number_product", "name", "description","quantity","price","categories","created_at","updated_at",]
+        fields = ["id", "images","name", "description","quantity","price","categories","created_at","updated_at",]
 
     def create(self, validated_data):
         categories_data = validated_data.get('categories')
+        images = validated_data.get('images')
         product = Product.objects.create(
-            number_product=validated_data.get('number_product'),
             name=validated_data.get('name'),
             description=validated_data.get('description'),
             quantity=validated_data.get('quantity'),
@@ -26,6 +43,10 @@ class ProductSerializer(serializers.ModelSerializer):
             for c in categories_data:
                 category = get_category(c)
                 product.categories.add(category)
+        if product and images is not None:
+            for i in images:
+                img = ProductImageSerializer.create(ProductImageSerializer(), validated_data=i)
+                product.images.add(img)
         product.save()
         return product
 
@@ -35,7 +56,7 @@ class ProductSerializer(serializers.ModelSerializer):
             for c in categories_data:
                 category = get_category(c.get('id'))
                 instance.categories.add(category)
-        instance.number_product = validated_data.get('number_product', instance.number_product)
+        instance.image_url = validated_data.get('image_url', instance.image_url)
         instance.name = validated_data.get('name', instance.name)
         instance.quantity = validated_data.get('quantity', instance.quantity)
         instance.price = validated_data.get('price', instance.price)
