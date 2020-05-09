@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^register$', views.UserCreate.as_view(), name='register'),
     url(r'^users$', views.ViewAllUsers.as_view()),
     url(r'^users/(?P<pk>[0-9]+)$', views.UsersGet.as_view()),
+    url(r'^users/favorites$', views.FavoritesView.as_view()),
+    url(r'^users/favorites/(?P<pk>[0-9]+)$', views.FavoritesDelete.as_view()),
     url(r'^my-profile$', views.MyProfile.as_view()),
     url(r'^users/inactivate$', views.InactivateUser.as_view()),
     url(r'^users/activate$', views.ActivateUser.as_view()),

@@ -2,20 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0ca4149-05fd-44fa-8921-850924e01352" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/core/purchases/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/purchases/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/purchases/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/purchases/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/purchases/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/purchases/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/carrosel/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/carrosel/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/carrosel/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/carrosel/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/carrosel/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/carrosel/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/carrosel/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/order/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/order/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/order/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/order/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/order/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/order/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/order/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/accounts/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/accounts/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/categoria/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/categoria/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/produto/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/produto/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/produto/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/produto/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/produto/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/produto/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/produto/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/produto/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/purchases/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/purchases/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/purchases/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/purchases/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/purchases/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/purchases/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/purchases/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/purchases/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ecommerce/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ecommerce/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecommerce/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ecommerce/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,23 +57,22 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/core/purchases" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/core/order" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/core/order" />
+      <recent name="$PROJECT_DIR$/core/carrosel" />
       <recent name="$PROJECT_DIR$/core/purchases" />
       <recent name="$PROJECT_DIR$/core" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/core/user" />
-      <recent name="$PROJECT_DIR$/core/categoria" />
     </key>
   </component>
   <component name="RunManager">
@@ -97,12 +114,21 @@
       <workItem from="1585517121741" duration="2000" />
       <workItem from="1585869645773" duration="10770000" />
       <workItem from="1586022963644" duration="45000" />
-      <workItem from="1586045653990" duration="5454000" />
+      <workItem from="1586045653990" duration="5761000" />
+      <workItem from="1586132995968" duration="277000" />
+      <workItem from="1587785174131" duration="601000" />
+      <workItem from="1587948236764" duration="609000" />
+      <workItem from="1587954200647" duration="606000" />
+      <workItem from="1588979489274" duration="7123000" />
+      <workItem from="1589047153038" duration="6938000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
   </component>
   <component name="WindowStateProjectService">
     <state x="723" y="180" width="560" height="433" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1585883268902">
@@ -121,10 +147,10 @@
       <screen x="0" y="27" width="1366" height="741" />
     </state>
     <state x="0" y="32" key="SettingsEditor/0.27.1366.741@0.27.1366.741" timestamp="1585190932176" />
-    <state x="347" y="222" key="com.intellij.ide.util.TipDialog" timestamp="1586022964883">
+    <state x="347" y="222" key="com.intellij.ide.util.TipDialog" timestamp="1586133027566">
       <screen x="0" y="27" width="1366" height="741" />
     </state>
-    <state x="347" y="222" key="com.intellij.ide.util.TipDialog/0.27.1366.741@0.27.1366.741" timestamp="1586022964883" />
+    <state x="347" y="222" key="com.intellij.ide.util.TipDialog/0.27.1366.741@0.27.1366.741" timestamp="1586133027566" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

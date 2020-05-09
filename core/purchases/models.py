@@ -4,7 +4,7 @@ from django.db.models import DO_NOTHING
 from core.produto.models import Product
 
 
-class Purchase(models.Model):
+class ItemProduct(models.Model):
     class Meta(object):
         verbose_name = 'Purchase'
         verbose_name_plural = 'Purchases'
@@ -24,12 +24,12 @@ class Purchase(models.Model):
     id = models.AutoField(primary_key=True)
     product = models.ForeignKey(Product, null=False, blank=False, on_delete=DO_NOTHING)
     quantity = models.IntegerField(default=1, null=False, blank=False)
-    product_price = models.FloatField(null=False, blank=False)
-    total_price = models.FloatField(null=False, blank=False)
+    product_price = models.FloatField(null=True, blank=True)
+    total_price = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         self.product_price = self.product.price
         self.total_price = self.product_price*self.quantity
-        super(Purchase, self).save(*args, **kwargs)
+        super(ItemProduct, self).save(*args, **kwargs)

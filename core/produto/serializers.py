@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from core.categoria.models import Category
 from core.categoria.serializers import CategorySerializer
-from core.produto.models import Product, ProductImage
+from core.produto.models import Product, ProductImage, Offer
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -63,8 +63,30 @@ class ProductSerializer(serializers.ModelSerializer):
         instance.description = validated_data.get('description', instance.description)
         instance.save()
         return instance
-    
-    
+
+
+class OfferSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+
+    class Meta:
+        model = Offer
+        fields = ["id","new_price", "product", "created_at","updated_at", ]
+
+    def create(self, validated_data):
+        id = validated_data.get('product')
+        p = Product.objects.get(pk=id)
+        offer = Offer.objects.create(
+            product=p,
+            new_price=validated_data.get('new_price')
+        )
+        return offer
+
+    def update(self, instance, validated_data):
+        instance.new_price = validated_data.get('new_price', instance.price)
+        instance.save()
+        return instance
+
+
 def get_category(category):
     try:
         return Category.objects.get(pk=category)

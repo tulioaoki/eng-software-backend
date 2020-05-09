@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-
-from core.accounts.roles.models import Role
-from core.accounts.utils import validate_role
 from .models import CustomUser
-
+from ..produto.serializers import ProductSerializer
 
 
 class UserViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('name', 'email_alternativo',    
+        fields = ('name', 'email_alternativo','favorites','cart',
                   'username', 'is_admin' 'phone', 'ddd_phone_comercial',
                   'comercial_phone', "ddd_phone","phone", 'tratamento', 'logradouro','tipo_logradouro',
                   'numero_logradouro',"complemento", "bairro","localidade","cidade","uf","cep","notas")
@@ -19,17 +16,17 @@ class UserViewSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    favorites = ProductSerializer(read_only=True, many=True)
 
     class Meta:
         model = CustomUser
-        fields = ('id','name','email_alternativo',
+        fields = ('id','name','email_alternativo','favorites','cart',
                   'username','is_admin','phone','password', 'ddd_phone_comercial',
                   'comercial_phone', "ddd_phone","phone", 'tratamento','logradouro','tipo_logradouro',
                   'numero_logradouro',"complemento", "bairro","localidade","cidade","uf","cep","notas")
 
 
     def create(self, validated_data,):
-
         user = CustomUser.objects.create(
             username=validated_data.get('username'),
             name=validated_data.get('name'),

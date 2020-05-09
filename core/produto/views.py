@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from core.produto.models import ProductImage, Product
-from core.produto.serializers import ProductImageSerializer, ProductSerializer
+from core.produto.models import ProductImage, Product, Offer
+from core.produto.serializers import ProductImageSerializer, ProductSerializer, OfferSerializer
 from core.utils.utilities import default_response, custom_filter
 
 
@@ -143,6 +143,78 @@ class ProductImageDetail(APIView):
         return Response(default_response(code='get.productImage.success',
                                          success=True,
                                          message='ProductImage retornada com sucesso.',
+                                         data=serializer.data,
+                                         ),status.HTTP_200_OK)
+
+    def delete(self,request,pk,format=None):
+        to_be_deleted = self.get_object(pk)
+        to_be_deleted.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class OfferView(APIView):
+    permission_classes = (AllowAny,)
+    http_method_names = ['get', 'post',]
+
+    def get_objects(self, request):
+        objects = Offer.objects.all().order_by('-created_at')
+        obj = custom_filter(objects, request)
+        return obj
+
+    def get(self, request, format=None):
+        product = self.get_objects(request)
+        serializer = OfferSerializer(product, many=True)
+        return Response(default_response(code='get.offer.success',
+                                         success=True,
+                                         data=serializer.data,
+                                         message="Oferta retornado com sucesso."
+                                         ), status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = OfferSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.create(validated_data=request.data)
+            if type(data) == str:
+                return Response(default_response(code='get.product.error',
+                                                 success=False,
+                                                 message='Oferta não retornado com sucesso.',
+                                                 data={'detail':data},
+                                                 )
+                                ,status=status.HTTP_400_BAD_REQUEST)
+            return Response(default_response(code='create.product.success',
+                                         success=True,
+                                         message='Oferta retornada com sucesso.',
+                                         data=serializers.serialize('json', [data, ]),
+                                         ), status=status.HTTP_201_CREATED,)
+        return Response(default_response(code='get.offer.error',
+                                         success=False,
+                                         message='Oferta não retornada com sucesso.',
+                                         data=serializer.errors,
+                                         ),
+                        status=status.HTTP_400_BAD_REQUEST)
+
+
+class OfferDetail(APIView):
+    permission_classes = (AllowAny,)
+    http_method_names = ['get', 'delete']
+
+    def get_object(self,pk):
+        try:
+            return Offer.objects.get(pk=pk)
+        except Offer.DoesNotExist:
+             return default_response(code='get.offer.error',
+                                        success=False,
+                                        message='Oferta não existe ou ja foi deletado.',
+                                        )
+
+    def get(self, request,pk, format=None):
+        objects = self.get_object(pk)
+        if type(objects) == dict:
+                return Response(objects, status.HTTP_404_NOT_FOUND)
+        serializer = OfferSerializer(objects)
+        return Response(default_response(code='get.offer.success',
+                                         success=True,
+                                         message='Oferta retornada com sucesso.',
                                          data=serializer.data,
                                          ),status.HTTP_200_OK)
 

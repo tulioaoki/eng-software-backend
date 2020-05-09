@@ -9,7 +9,7 @@ class ListAdminMixin(object):
 
 
 class CustomApp(AppConfig):
-    name = 'ecommerce.core.carrosel'
+    name = 'ecommerce.core.order'
 
     def ready(self):
         models = apps.get_models()

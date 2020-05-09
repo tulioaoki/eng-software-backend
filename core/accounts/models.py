@@ -10,7 +10,8 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 from core.accounts.roles.models import Role
-from core.accounts.roles.utils import get_default_role
+from core.produto.models import Product
+from core.purchases.models import ItemProduct
 from core.validators import only_numbers, only_char, positive, validate_email
 
 
@@ -86,21 +87,17 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     cep = models.CharField(max_length=8,validators=[only_numbers], blank=True, null=True)
     notas = models.CharField(max_length=100, blank=True, null=True)
 
+    favorites = models.ManyToManyField(Product, related_name="favoritos")
+    cart = models.ManyToManyField(ItemProduct, related_name="carrinho")
+
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     objects = MyUserManager()
 
     USERNAME_FIELD = 'username'
 
-    def get_profile_name(self):
-        return str(self.profile.profile_name)
-
     def clean(self):
         self.name = self.name.capitalize()
-
-    def get_email(self):
-        if self.email:
-            return self.email
 
     def get_full_name(self):
         return self.name

@@ -1,12 +1,17 @@
+from django.contrib.auth.models import User
 from django.http import Http404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
+from rest_framework.utils import json
 from rest_framework.views import APIView
 
 from core.accounts.models import CustomUser
 from core.accounts.serializers import UserSerializer, UserInfoSerializer, \
     UserViewSerializer
+from core.produto.models import Product
+from core.produto.serializers import ProductSerializer
+from core.purchases.serializers import ItemProductSerializer, ItemProductSerializerPkOnly
 from core.utils.utilities import default_response, custom_filter
 
 
@@ -220,3 +225,62 @@ class UserRole(APIView):
         role = self.get_object(request)
         resp = {'role': role}
         return Response(resp, status=status.HTTP_200_OK)
+
+
+class FavoritesView(APIView):
+    permission_classes = (IsAuthenticated,)
+    http_method_names = ['post','get']
+
+    def get_product(self,pk):
+        try:
+            return Product.objects.get(id=pk)
+        except CustomUser.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        user = request.user
+        data = ProductSerializer(user.favorites.all(), many=True).data
+        return Response(default_response(code='put.users.success',
+                                         success=True,
+                                         message='Listou favoritos com successo.',
+                                         data=data,
+                                         ), status=status.HTTP_200_OK)
+
+    def post(self, request, format=None):
+        user = request.user
+        pk = request.data.get("id", None)
+        p = self.get_product(pk)
+        user.favorites.add(p)
+        user.save()
+        data = ProductSerializer(user.favorites.all(), many=True).data
+        return Response(default_response(code='put.favorites.success',
+                                     success=True,
+                                     message='Item adicionado aos favoritos com successo.',
+                                     data=data,
+                                     ), status=status.HTTP_201_CREATED)
+
+
+class FavoritesDelete(APIView):
+    permission_classes = (IsAuthenticated,)
+    http_method_names = ['delete',]
+
+    def get_product(self, pk):
+        try:
+            return Product.objects.get(id=pk)
+        except Product.DoesNotExist:
+            raise Http404
+
+    def delete(self, request,pk, format=None):
+        user = request.user
+        p = self.get_product(pk)
+        user.favorites.remove(p)
+        user.save()
+        data = ProductSerializer(user.favorites.all(), many=True).data
+        return Response(default_response(code='delete.favorites.success',
+                                         success=True,
+                                         message='Item removido aos favoritos com successo.',
+                                         data=data,
+                                         ), status=status.HTTP_200_OK)
+
+
+

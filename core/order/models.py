@@ -1,10 +1,12 @@
+from django.contrib.auth.models import User
 from django.db import models
+from core.purchases.models import ItemProduct
 
 
-class Image(models.Model):
+class Order(models.Model):
     class Meta(object):
-        verbose_name = 'Image'
-        verbose_name_plural = 'Images'
+        verbose_name = 'Order'
+        verbose_name_plural = 'Orders'
         permissions = (
             ("{}_{}_visualizar".format("geral", verbose_name_plural.lower()),
              "Pode visualizar {}".format(verbose_name_plural)),
@@ -16,40 +18,21 @@ class Image(models.Model):
         default_permissions = ()
 
     def __str__(self):
-        return self.url
+        return self.id
 
     id = models.AutoField(primary_key=True)
-    url = models.TextField(null=True, blank=True)
-    base_64 = models.TextField(null=True, blank=True)
+    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.DO_NOTHING)
+    purchases = models.ManyToManyField(ItemProduct)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):
-        super(Image, self).save(*args, **kwargs)
-
-
-class Carrosel(models.Model):
-    class Meta(object):
-        verbose_name = 'Carrosel'
-        verbose_name_plural = 'Carrosel'
-        permissions = (
-            ("{}_{}_visualizar".format("geral", verbose_name_plural.lower()),
-             "Pode visualizar {}".format(verbose_name_plural)),
-            (
-                "{}_{}_editar".format("geral", verbose_name_plural.lower()),
-                "Pode visualizar e editar {}".format(verbose_name_plural)),
-        )
-
-        default_permissions = ()
-
-    def __str__(self):
-        return self.name
-
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=20)
-    images = models.ManyToManyField(Image)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    @property
+    def total_value(self):
+        valor = 0
+        for p in self.purchases.all():
+            valor = (p.product_price * p.quantity) + valor
+        return valor
 
     def save(self, *args, **kwargs):
-        super(Carrosel, self).save(*args, **kwargs)
+        super(Order, self).save(*args, **kwargs)
+

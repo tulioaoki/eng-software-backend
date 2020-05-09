@@ -60,3 +60,34 @@ class ProductImage(models.Model):
 
     def save(self, *args, **kwargs):
         super(ProductImage, self).save(*args, **kwargs)
+
+
+class Offer(models.Model):
+    class Meta(object):
+        verbose_name = 'Offer'
+        verbose_name_plural = 'Offer'
+        permissions = (
+            ("{}_{}_visualizar".format("geral", verbose_name_plural.lower()),
+             "Pode visualizar {}".format(verbose_name_plural)),
+            (
+                "{}_{}_editar".format("geral", verbose_name_plural.lower()),
+                "Pode visualizar e editar {}".format(verbose_name_plural)),
+        )
+
+        default_permissions = ()
+
+    def __str__(self):
+        return self.product.name
+
+    id = models.AutoField(primary_key=True)
+    product = models.ForeignKey(Product, null=False, blank=False, on_delete=models.CASCADE)
+    new_price = models.FloatField(null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    #@property
+    #def test(self):
+    #   return 9000000 - self.product.price
+
+    def save(self, *args, **kwargs):
+        super(Offer, self).save(*args, **kwargs)

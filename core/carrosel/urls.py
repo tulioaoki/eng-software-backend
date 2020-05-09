@@ -3,12 +3,11 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from django.conf.urls.static import static
 from django.conf import settings
 
-from core.categoria.views import Categorias, CategoriaDetail
-from core.produto.views import Produtos, ProdutoDetail
+from core.carrosel.views import *
 
 urlpatterns = [
-    url(r'^categories$', Categorias.as_view()),
-    url(r'^categories/(?P<pk>[0-9]+)$', CategoriaDetail.as_view()),
+    url(r'^carrosel$', CarroselView.as_view()),
+    url(r'^carrosel/(?P<pk>[0-9]+)$', CarroselDetail.as_view()),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

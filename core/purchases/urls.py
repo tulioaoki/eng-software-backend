@@ -3,11 +3,11 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from django.conf.urls.static import static
 from django.conf import settings
 
-from core.produto.views import Produtos, ProdutoDetail
+from core.purchases import views
 
 urlpatterns = [
-    url(r'^products$', Produtos.as_view()),
-    url(r'^products/(?P<pk>[0-9]+)$', ProdutoDetail.as_view()),
+    url(r'^cart$', views.CartView.as_view()),
+    url(r'^cart/(?P<pk>[0-9]+)$', views.CartEdit.as_view()),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
