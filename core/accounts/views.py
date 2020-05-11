@@ -103,14 +103,13 @@ class MyProfile(APIView):
     def get_object(self):
         try:
             username = self.request.user
-            user = CustomUser.objects.get(username=username)
+            user = User.objects.get(username=username)
             return user
-        except CustomUser.DoesNotExist:
+        except User.DoesNotExist:
             raise Http404
 
     def get(self, request, format=None):
-        objects = self.get_object()
-        serializer = UserViewSerializer(objects)
+        serializer = UserViewSerializer(request.user)
         return Response(default_response(code='get.users.success',
                                          success=True,
                                          message='User retornado com successo.',

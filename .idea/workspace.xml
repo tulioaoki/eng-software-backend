@@ -2,38 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0ca4149-05fd-44fa-8921-850924e01352" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/core/carrosel/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/carrosel/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/carrosel/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/carrosel/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/carrosel/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/carrosel/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/carrosel/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/order/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/order/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/order/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/order/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/order/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/order/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/order/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/accounts/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/accounts/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/categoria/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/categoria/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/produto/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/produto/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/produto/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/produto/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/produto/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/produto/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/produto/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/produto/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/purchases/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/purchases/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/purchases/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/purchases/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/purchases/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/purchases/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/purchases/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/purchases/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecommerce/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ecommerce/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecommerce/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ecommerce/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,16 +33,16 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/core/order" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/core/order" />
       <recent name="$PROJECT_DIR$/core/carrosel" />
       <recent name="$PROJECT_DIR$/core/purchases" />
       <recent name="$PROJECT_DIR$/core" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunManager">
@@ -120,7 +90,8 @@
       <workItem from="1587948236764" duration="609000" />
       <workItem from="1587954200647" duration="606000" />
       <workItem from="1588979489274" duration="7123000" />
-      <workItem from="1589047153038" duration="6938000" />
+      <workItem from="1589047153038" duration="7815000" />
+      <workItem from="1589144157867" duration="5000" />
     </task>
     <servers />
   </component>
