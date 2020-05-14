@@ -1,13 +1,15 @@
+import random
 import string
+
+from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-import random
+from rest_framework.views import APIView
+
 from core.accounts.models import CustomUser
-from core.loginAndRegister.utils import get_role, forgot_password_email
+from core.loginAndRegister.utils import forgot_password_email
 from core.utils.utilities import default_response
 
 
@@ -21,9 +23,7 @@ class CustomLogin(ObtainAuthToken,APIView,):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        role = get_role(request)
-        prof = user.profile.profile_name
-        data = {'token': token.key,'role':role,'profile':prof}
+        data = {'token': token.key,'user':user.username}
         return Response(default_response(code='post.login.success',
                                          success=True,
                                          message='Login realizado com sucesso.',

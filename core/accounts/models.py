@@ -87,8 +87,8 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     cep = models.CharField(max_length=8,validators=[only_numbers], blank=True, null=True)
     notas = models.CharField(max_length=100, blank=True, null=True)
 
-    favorites = models.ManyToManyField(Product, related_name="favoritos")
-    cart = models.ManyToManyField(ItemProduct, related_name="carrinho")
+    favorites = models.ManyToManyField(Product, related_name="favoritos", null=True)
+    cart = models.ManyToManyField(ItemProduct, related_name="carrinho", null=True)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

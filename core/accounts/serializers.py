@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from .models import CustomUser
 from ..produto.serializers import ProductSerializer
+from ..purchases.serializers import ItemProductSerializer
 
 
 class UserViewSerializer(serializers.ModelSerializer):
@@ -17,6 +18,7 @@ class UserViewSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     favorites = ProductSerializer(read_only=True, many=True)
+    cart = ItemProductSerializer(read_only=True, many=True)
 
     class Meta:
         model = CustomUser
@@ -56,7 +58,16 @@ class UserSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name', instance.name)
         instance.phone = validated_data.get('phone', instance.phone)
         instance.email_alternativo = validated_data.get('email_alternativo', instance.email_alternativo)
-        instance.role = validated_data.get( instance.role)
+        instance.logradouro = validated_data.get('logradouro', instance.logradouro)
+        instance.tipo_logradouro = validated_data.get('tipo_logradouro', instance.tipo_logradouro)
+        instance.complemento = validated_data.get('complemento', instance.complemento)
+        instance.bairro = validated_data.get('bairro', instance.bairro)
+        instance.localidade = validated_data.get('localidade', instance.localidade)
+        instance.cidade = validated_data.get('cidade', instance.cidade)
+        instance.uf = validated_data.get('uf', instance.uf)
+        instance.cep = validated_data.get('cep', instance.cep)
+        instance.notas = validated_data.get('notas', instance.notas)
+
         instance.save()
         return instance
 
@@ -65,4 +76,4 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id','username','profile','name', 'phone', ]
+        fields = ['id','username','name', 'phone', ]

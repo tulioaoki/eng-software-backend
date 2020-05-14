@@ -6,20 +6,23 @@ from core.carrosel.models import Carrosel, Image
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = ["id", "url", "base_64", "created_at", "updated_at", ]
+        fields = ["id", "url", "base_64", "link","created_at", "updated_at", ]
 
     def create(self, validated_data):
         image = Image.objects.create(
             url=validated_data.get('url'),
             base_64=validated_data.get('base_64'),
+            link=validated_data.get('link')
         )
         return image
 
     def update(self, instance, validated_data):
         instance.image_url = validated_data.get('image_url', instance.image_url)
         instance.base_64 = validated_data.get('base_64', instance.base_64)
+        instance.link = validated_data.get('link', instance.link)
         instance.save()
         return instance
+
 
 class CarroselSerializer(serializers.ModelSerializer):
     images = ImageSerializer(read_only=True, many=True)

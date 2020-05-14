@@ -3,7 +3,6 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
-from rest_framework.utils import json
 from rest_framework.views import APIView
 
 from core.accounts.models import CustomUser
@@ -11,7 +10,6 @@ from core.accounts.serializers import UserSerializer, UserInfoSerializer, \
     UserViewSerializer
 from core.produto.models import Product
 from core.produto.serializers import ProductSerializer
-from core.purchases.serializers import ItemProductSerializer, ItemProductSerializerPkOnly
 from core.utils.utilities import default_response, custom_filter
 
 
@@ -71,7 +69,7 @@ class UsersGet(APIView):
 
     def get(self, request, pk, format=None):
         objects = self.get_object(pk)
-        serializer = UserInfoSerializer(objects)
+        serializer = UserSerializer(objects)
         return Response(default_response(code='get.users.success',
                                          success=True,
                                          message='User retornado com successo.',
@@ -239,7 +237,7 @@ class FavoritesView(APIView):
     def get(self, request, format=None):
         user = request.user
         data = ProductSerializer(user.favorites.all(), many=True).data
-        return Response(default_response(code='put.users.success',
+        return Response(default_response(code='get.favorites.success',
                                          success=True,
                                          message='Listou favoritos com successo.',
                                          data=data,
@@ -252,7 +250,7 @@ class FavoritesView(APIView):
         user.favorites.add(p)
         user.save()
         data = ProductSerializer(user.favorites.all(), many=True).data
-        return Response(default_response(code='put.favorites.success',
+        return Response(default_response(code='post.favorites.success',
                                      success=True,
                                      message='Item adicionado aos favoritos com successo.',
                                      data=data,

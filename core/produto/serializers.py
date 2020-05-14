@@ -52,11 +52,19 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         categories_data = validated_data.get('categories')
+        images = validated_data.get('images')
         if categories_data:
+            request_categories = []
             for c in categories_data:
                 category = get_category(c.get('id'))
-                instance.categories.add(category)
-        instance.image_url = validated_data.get('image_url', instance.image_url)
+                request_categories.append(category)
+                if category in instance.categories.all():
+                    pass
+                else:
+                    instance.categories.add(category)
+            for k in instance.categories.all():
+                if k not in request_categories:
+                    instance.categories.remove(k)
         instance.name = validated_data.get('name', instance.name)
         instance.quantity = validated_data.get('quantity', instance.quantity)
         instance.price = validated_data.get('price', instance.price)
@@ -92,3 +100,36 @@ def get_category(category):
         return Category.objects.get(pk=category)
     except Category.DoesNotExist:
         return None
+
+
+class ProductEditSerializer(serializers.ModelSerializer):
+    categories = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(),many=True, read_only=False,)
+    images = ProductImageSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Product
+
+        fields = ["id", "images", "name", "description", "quantity", "price", "categories", "created_at",
+                  "updated_at", ]
+
+
+    def update(self, instance, validated_data):
+        categories_data = validated_data.get('categories')
+        images = validated_data.get('images')
+        if categories_data:
+            request_categories = []
+            for c in categories_data:
+                request_categories.append(c)
+                if c in instance.categories.all():
+                    pass
+                else:
+                    instance.categories.add(c)
+            for k in instance.categories.all():
+                if k not in request_categories:
+                    instance.categories.remove(k)
+        instance.name = validated_data.get('name', instance.name)
+        instance.quantity = validated_data.get('quantity', instance.quantity)
+        instance.price = validated_data.get('price', instance.price)
+        instance.description = validated_data.get('description', instance.description)
+        instance.save()
+        return instance

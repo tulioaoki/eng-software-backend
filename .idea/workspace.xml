@@ -3,7 +3,17 @@
   <component name="ChangeListManager">
     <list default="true" id="c0ca4149-05fd-44fa-8921-850924e01352" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/accounts/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/accounts/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/accounts/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/carrosel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/carrosel/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/carrosel/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/carrosel/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/carrosel/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/carrosel/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/loginAndRegister/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/loginAndRegister/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/produto/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/produto/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/produto/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/produto/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,6 +102,8 @@
       <workItem from="1588979489274" duration="7123000" />
       <workItem from="1589047153038" duration="7815000" />
       <workItem from="1589144157867" duration="5000" />
+      <workItem from="1589226042244" duration="1512000" />
+      <workItem from="1589415159078" duration="5766000" />
     </task>
     <servers />
   </component>

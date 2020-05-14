@@ -37,6 +37,7 @@ class CarroselView(APIView):
                                                  data={'detail':data},
                                                  )
                                 ,status=status.HTTP_400_BAD_REQUEST)
+            data = CarroselSerializer(data).data
             return Response(default_response(code='create.category.success',
                                          success=True,
                                          message='Carrosel retornado com sucesso.',

@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from core.produto.models import ProductImage, Product, Offer
-from core.produto.serializers import ProductImageSerializer, ProductSerializer, OfferSerializer
+from core.produto.serializers import ProductImageSerializer, ProductSerializer, OfferSerializer, ProductEditSerializer
 from core.utils.utilities import default_response, custom_filter
 
 
@@ -52,7 +52,7 @@ class Produtos(APIView):
 
 class ProdutoDetail(APIView):
     permission_classes = (AllowAny,)
-    http_method_names = ['get', 'delete']
+    http_method_names = ['get', 'delete', 'put']
 
     def get_object(self,pk):
         try:
@@ -62,6 +62,24 @@ class ProdutoDetail(APIView):
                                         success=False,
                                         message='Produto não existe ou ja foi deletado.',
                                         )
+        
+    def put(self, request, pk, format=None):
+        objects = self.get_object(pk)
+        serializer = ProductEditSerializer(objects, data=request.data, partial=True)
+        if serializer.is_valid():
+            data = ProductSerializer(self.get_object(pk)).data
+            return Response(default_response(code='put.products.success',
+                                         success=True,
+                                         message='Product editado com successo.',
+                                         data=data,
+                                         ), status=status.HTTP_201_CREATED)
+        return Response(default_response(code='put.products.fail',
+                                         success=True,
+                                         message='Product nao editado com successo.',
+                                         data=serializer.errors,
+                                         ),
+                                         status=status.HTTP_400_BAD_REQUEST)
+
 
     def get(self, request,pk, format=None):
         objects = self.get_object(pk)

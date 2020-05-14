@@ -20,6 +20,7 @@ class Image(models.Model):
 
     id = models.AutoField(primary_key=True)
     url = models.TextField(null=True, blank=True)
+    link = models.TextField(null=True, blank=True)
     base_64 = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
