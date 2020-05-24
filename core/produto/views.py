@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from core.produto.models import ProductImage, Product
 from core.produto.serializers import ProductImageSerializer, ProductSerializer, ProductEditSerializer
-from core.utils.utilities import default_response, custom_filter, paginated_response_dict
+from core.utils.utilities import default_response, custom_filter, paginated_response_dict, ObjectNotFound
 
 
 class Produtos(APIView):
@@ -20,6 +20,8 @@ class Produtos(APIView):
     def get(self, request, format=None):
         items = self.get_objects(request)
         pagination_data = paginated_response_dict(items, request)
+        if pagination_data is None:
+            raise ObjectNotFound
         serializer = ProductSerializer(pagination_data.get('objects'), many=True)
         return Response(default_response(code='get.product.success',
                                          success=True,
