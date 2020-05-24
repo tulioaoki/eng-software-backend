@@ -31,7 +31,7 @@ def paginated_response_dict(objects, request):
         return {'objects': p.page(page).object_list, 'page': page, "item_count": item_count}
 
 
-def default_response(code, message, success, data=None, pagination_data=None):
+def default_response(code, message, success, data=None,status_code=None ,pagination_data=None):
     """
     Gera uma resposta padronizada baseada no sucesso da requisicao HTTP
     Caso haja sucesso, retorna o status_code padrao de sucesso, um codigo, sucesso, uma mensagem e objeto (caso haja)
