@@ -1,27 +1,57 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied, FieldError
 from django.db.models import CharField, TextField, Func, Q
-from django.http import Http404
+from django.contrib.postgres.search import SearchVector, SearchQuery
 from rest_framework.views import exception_handler
 from rest_framework.exceptions import APIException
+from core.produto.models import Product
 
 filterable_foreign_keys = (
 
 )
 
+def paginated_response_dict(objects, request):
+    if request and objects:
+        get_data = request.query_params  # or request.GET check both
+        data = get_data
+        data._mutable = True
+        from django.core.paginator import Paginator
+        page = 1
+        page_size = 10
+        item_count = len(objects)
+        if 'page' in data.keys():
+            page = int(data.pop('page', [1])[0])
+            if page and page < 1:
+                page = 1
+        if 'page_size' in data.keys():
+            page_size = int(data.pop('page_size',[10])[0])
+        p = Paginator(objects, page_size)
+        if page > p.page_range[-1]:
+            raise ObjectNotFound("Page index out of range, max index is: {}".format(p.page_range[-1]))
+        return {'objects': p.page(page).object_list, 'page': page, "item_count": item_count}
 
-def default_response(code,message,success,data=None,status_code=None):
+
+def default_response(code, message, success, data=None, pagination_data=None):
     """
     Gera uma resposta padronizada baseada no sucesso da requisicao HTTP
     Caso haja sucesso, retorna o status_code padrao de sucesso, um codigo, sucesso, uma mensagem e objeto (caso haja)
     Caso haja falha, retorna objeto de erro e mensagem de erro.
     """
+    if pagination_data is None:
+        pagination_data = {}
+    objects = pagination_data.get('objects')
+    page = pagination_data.get('page') if pagination_data.get('page') else 1
+    page_size = len(objects) if objects else (len(data) if type(data) == 'list' else 1)
+    item_count = pagination_data.get('item_count') if pagination_data.get('item_count') else  (len(data) if type(data) == 'list' else 1)
     if success:
         return{
                 'code':code,
                 'success':True,
                 'message': message,
                 'data': (data if data is not None else []),
+                'page':page,
+                'page_size':page_size,
+                'item_count':item_count
               }
     else:
         return {
@@ -29,6 +59,9 @@ def default_response(code,message,success,data=None,status_code=None):
                 'success': False,
                 'message': message,
                 'errors': (data if data is not None else []),
+                'page': None,
+                'page_size': None,
+                'item_count': None
               }
 
 
@@ -93,7 +126,7 @@ def custom_exception_handler(exc, context):
     return response
 
 
-def custom_filter(objects, request):
+def custom_filter(objects, request, type=None):
 
     try:
         """ 
@@ -109,80 +142,23 @@ def custom_filter(objects, request):
         limit = False
         if 'limit' in data.keys():
             limit = data.pop('limit')
-        if 'ordering' in data.keys():
-            ordering = data.pop('ordering')[0]
+        if 'order' in data.keys():
+            ordering = data.pop('order')[0]
         if 'search' in data.keys():
             """
             A key 'Search' é utilizada para procurar alguma string dentro de campos de string/texto no objeto.
             """
             searched = data.get('search')
-            objects = objects.filter(pk__icontains=searched)
-            return objects
+            query = SearchQuery(searched)
+            vector = SearchVector('name', 'description')
+            objects = Product.objects.annotate(search=vector).filter(search=query)
         """
         Filtra a queryset com as keys presentes na URL
         """
         for keys in data.keys():
                 kwargs[str(keys)] = str(get_data[keys])
-                objects = objects.filter(**kwargs)
-
-        if ordering:
-            """
-            Ordena a query de acordo com o campo solicitado na URL
-            """
-            objects = objects.order_by(ordering)
-        if limit:
-            """
-            Caso o campo 'limit' esteja presente na URL,
-             limita o numero de objetos a serem retornados de acordo com o solicitado
-            """
-            objects = objects.all()[:int(limit)]
-        return objects
-    except FieldError:
-        return objects
-    except ValueError:
-        raise ObjectNotFound('Invalid search field')
-
-
-def custom_filter_processo(objects, request):
-
-    try:
-        """ 
-        Este filtro utiliza as informacoes vindas da URL.
-        Caso existam chaves especiais na requicao da URL, sao retiradas para que nao interfiram no filtro do QuerySet.
-        As chaves restantes (chaves do model) serao utilizadas para filtrar o queryset.
-        """
-        get_data = request.query_params  # or request.GET check both
-        kwargs = {}
-        data = get_data
-        data._mutable = True
-        ordering = False
-        limit = False
-        if 'limit' in data.keys():
-            limit = data.pop('limit')
-        if 'ordering' in data.keys():
-            ordering = data.pop('ordering')[0]
-        if 'search' in data.keys():
-            """
-            A key 'Search' é utilizada para procurar alguma string dentro de campos de string/texto no objeto.
-            """
-            searched = data.get('search')
-
-            objects = objects.filter(
-                        Q(numero_processo__icontains=searched) |
-                        Q(autor__autor__icontains=searched) |
-                        Q(complemento_status__icontains=searched) |
-                        Q(observacoes__icontains=searched) |
-                        Q(descricao__icontains=searched) |
-                        Q(classificacao__classificacao__icontains=searched) |
-                        Q(classificacao__label__icontains=searched)
-
-            )
-            return objects
-        """
-        Filtra a queryset com as keys presentes na URL
-        """
-        for keys in data.keys():
-                kwargs[str(keys)] = str(get_data[keys])
+                kwargs.pop('page', None)
+                kwargs.pop('page_size', None)
                 objects = objects.filter(**kwargs)
 
         if ordering:

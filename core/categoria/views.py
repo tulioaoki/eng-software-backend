@@ -40,7 +40,7 @@ class Categorias(APIView):
             return Response(default_response(code='create.category.success',
                                          success=True,
                                          message='Categoria retornado com sucesso.',
-                                         data=data,
+                                         data=CategorySerializer(data).data,
                                          ), status=status.HTTP_201_CREATED,)
         return Response(default_response(code='get.category.error',
                                          success=False,
@@ -52,7 +52,7 @@ class Categorias(APIView):
 
 class CategoriaDetail(APIView):
     permission_classes = (AllowAny,)
-    http_method_names = ['get', 'delete']
+    http_method_names = ['get', 'delete','put']
 
     def get_object(self,pk):
         try:
@@ -78,3 +78,21 @@ class CategoriaDetail(APIView):
         to_be_deleted = self.get_object(pk)
         to_be_deleted.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+    def put(self, request, pk, format=None):
+        objects = self.get_object(pk)
+        serializer = CategorySerializer(objects, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(default_response(code='put.categories.success',
+                                         success=True,
+                                         message='Categoria editado com successo.',
+                                         data=serializer.data,
+                                         ), status=status.HTTP_201_CREATED)
+        return Response(default_response(code='put.categories.fail',
+                                         success=True,
+                                         message='Categoria nao editado com successo.',
+                                         data=serializer.errors,
+                                         ),
+                                         status=status.HTTP_400_BAD_REQUEST)

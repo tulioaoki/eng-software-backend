@@ -30,6 +30,9 @@ class ItemProduct(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        self.product_price = self.product.price
-        self.total_price = self.product_price*self.quantity
+        if self.product.offer:
+            self.product_price = self.product.offer_price
+        else:
+            self.product_price = self.product.price
+        self.total_price = self.product_price * self.quantity
         super(ItemProduct, self).save(*args, **kwargs)

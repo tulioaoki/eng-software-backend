@@ -1,4 +1,3 @@
-from django.core import serializers
 from django.http import Http404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -38,10 +37,12 @@ class CartView(APIView):
                                                  data={'detail': data},
                                                  )
                                 , status=status.HTTP_400_BAD_REQUEST)
+            s = ItemProductSerializer(data=user.cart.all(), many=True)
+            s.is_valid()
             return Response(default_response(code='create.item.success',
                                              success=True,
                                              message='Item retornada com sucesso.',
-                                             data=serializers.serialize('json', [data, ]),
+                                             data=s.data,
                                              ), status=status.HTTP_201_CREATED, )
         return Response(default_response(code='get.offer.error',
                                          success=False,

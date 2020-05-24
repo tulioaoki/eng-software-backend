@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from core.categoria.models import Category
 from core.categoria.serializers import CategorySerializer
-from core.produto.models import Product, ProductImage, Offer
+from core.produto.models import Product, ProductImage
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -28,7 +28,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         
-        fields = ["id", "images","name", "description","quantity","price","categories","created_at","updated_at",]
+        fields = ["id", "images", "offer", "offer_price", "name", "description", "quantity", "price", "categories", "created_at", "updated_at",]
 
     def create(self, validated_data):
         categories_data = validated_data.get('categories')
@@ -37,7 +37,9 @@ class ProductSerializer(serializers.ModelSerializer):
             name=validated_data.get('name'),
             description=validated_data.get('description'),
             quantity=validated_data.get('quantity'),
-            price=validated_data.get('price')
+            price=validated_data.get('price'),
+            offer=validated_data.get('offer'),
+            offer_price=validated_data.get('offer_price')
         )
         if product and categories_data:
             for c in categories_data:
@@ -65,32 +67,13 @@ class ProductSerializer(serializers.ModelSerializer):
             for k in instance.categories.all():
                 if k not in request_categories:
                     instance.categories.remove(k)
+
         instance.name = validated_data.get('name', instance.name)
+        instance.offer = validated_data.get('offer', instance.offer)
+        instance.offer_price = validated_data.get('offer_price', instance.offer_price)
         instance.quantity = validated_data.get('quantity', instance.quantity)
         instance.price = validated_data.get('price', instance.price)
         instance.description = validated_data.get('description', instance.description)
-        instance.save()
-        return instance
-
-
-class OfferSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)
-
-    class Meta:
-        model = Offer
-        fields = ["id","new_price", "product", "created_at","updated_at", ]
-
-    def create(self, validated_data):
-        id = validated_data.get('product')
-        p = Product.objects.get(pk=id)
-        offer = Offer.objects.create(
-            product=p,
-            new_price=validated_data.get('new_price')
-        )
-        return offer
-
-    def update(self, instance, validated_data):
-        instance.new_price = validated_data.get('new_price', instance.price)
         instance.save()
         return instance
 
@@ -109,9 +92,8 @@ class ProductEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
 
-        fields = ["id", "images", "name", "description", "quantity", "price", "categories", "created_at",
+        fields = ["id", "images","offer","offer_price", "name", "description", "quantity", "price", "categories", "created_at",
                   "updated_at", ]
-
 
     def update(self, instance, validated_data):
         categories_data = validated_data.get('categories')
@@ -127,9 +109,14 @@ class ProductEditSerializer(serializers.ModelSerializer):
             for k in instance.categories.all():
                 if k not in request_categories:
                     instance.categories.remove(k)
+
         instance.name = validated_data.get('name', instance.name)
+        instance.offer = validated_data.get('offer', instance.offer)
+        instance.offer_price = validated_data.get('offer_price', instance.offer_price)
         instance.quantity = validated_data.get('quantity', instance.quantity)
         instance.price = validated_data.get('price', instance.price)
+        if instance.offer_price > instance.price:
+            instance.offer_price = instance.price
         instance.description = validated_data.get('description', instance.description)
         instance.save()
         return instance

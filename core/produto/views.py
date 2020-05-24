@@ -3,9 +3,9 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from core.produto.models import ProductImage, Product, Offer
-from core.produto.serializers import ProductImageSerializer, ProductSerializer, OfferSerializer, ProductEditSerializer
-from core.utils.utilities import default_response, custom_filter
+from core.produto.models import ProductImage, Product
+from core.produto.serializers import ProductImageSerializer, ProductSerializer, ProductEditSerializer
+from core.utils.utilities import default_response, custom_filter, paginated_response_dict
 
 
 class Produtos(APIView):
@@ -18,12 +18,14 @@ class Produtos(APIView):
         return obj
 
     def get(self, request, format=None):
-        product = self.get_objects(request)
-        serializer = ProductSerializer(product, many=True)
+        items = self.get_objects(request)
+        pagination_data = paginated_response_dict(items, request)
+        serializer = ProductSerializer(pagination_data.get('objects'), many=True)
         return Response(default_response(code='get.product.success',
                                          success=True,
                                          data=serializer.data,
-                                         message="Produto retornado com sucesso."
+                                         message="Produto retornado com sucesso.",
+                                         pagination_data=pagination_data,
                                          ), status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -62,11 +64,12 @@ class ProdutoDetail(APIView):
                                         success=False,
                                         message='Produto não existe ou ja foi deletado.',
                                         )
-        
+
     def put(self, request, pk, format=None):
         objects = self.get_object(pk)
         serializer = ProductEditSerializer(objects, data=request.data, partial=True)
         if serializer.is_valid():
+            serializer.save()
             data = ProductSerializer(self.get_object(pk)).data
             return Response(default_response(code='put.products.success',
                                          success=True,
@@ -156,8 +159,8 @@ class ProductImageDetail(APIView):
     def get(self, request,pk, format=None):
         objects = self.get_object(pk)
         if type(objects) == dict:
-                return Response(objects, status.HTTP_404_NOT_FOUND)        
-        serializer = ProductImageSerializer(objects)        
+                return Response(objects, status.HTTP_404_NOT_FOUND)
+        serializer = ProductImageSerializer(objects)
         return Response(default_response(code='get.productImage.success',
                                          success=True,
                                          message='ProductImage retornada com sucesso.',
@@ -175,13 +178,13 @@ class OfferView(APIView):
     http_method_names = ['get', 'post',]
 
     def get_objects(self, request):
-        objects = Offer.objects.all().order_by('-created_at')
+        objects = Product.objects.filter(offer=True).order_by('-created_at')
         obj = custom_filter(objects, request)
         return obj
 
     def get(self, request, format=None):
         product = self.get_objects(request)
-        serializer = OfferSerializer(product, many=True)
+        serializer = ProductSerializer(product, many=True)
         return Response(default_response(code='get.offer.success',
                                          success=True,
                                          data=serializer.data,
@@ -189,7 +192,7 @@ class OfferView(APIView):
                                          ), status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = OfferSerializer(data=request.data)
+        serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.create(validated_data=request.data)
             if type(data) == str:
@@ -218,8 +221,8 @@ class OfferDetail(APIView):
 
     def get_object(self,pk):
         try:
-            return Offer.objects.get(pk=pk)
-        except Offer.DoesNotExist:
+            return Product.objects.filter(offer=True).get(pk=pk)
+        except Product.DoesNotExist:
              return default_response(code='get.offer.error',
                                         success=False,
                                         message='Oferta não existe ou ja foi deletado.',
@@ -229,7 +232,7 @@ class OfferDetail(APIView):
         objects = self.get_object(pk)
         if type(objects) == dict:
                 return Response(objects, status.HTTP_404_NOT_FOUND)
-        serializer = OfferSerializer(objects)
+        serializer = ProductSerializer(objects)
         return Response(default_response(code='get.offer.success',
                                          success=True,
                                          message='Oferta retornada com sucesso.',
