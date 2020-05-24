@@ -140,6 +140,11 @@ def custom_filter(objects, request, type=None):
         data._mutable = True
         ordering = False
         limit = False
+        categories=[]
+        if 'categories' in data.keys():
+            categories = data.pop('categories')
+        if categories:
+            objects = objects.filter(categories__in=categories)
         if 'limit' in data.keys():
             limit = data.pop('limit')
         if 'order' in data.keys():

@@ -115,7 +115,7 @@ class ProductEditSerializer(serializers.ModelSerializer):
         instance.offer_price = validated_data.get('offer_price', instance.offer_price)
         instance.quantity = validated_data.get('quantity', instance.quantity)
         instance.price = validated_data.get('price', instance.price)
-        if instance.offer_price > instance.price:
+        if instance.offer_price and instance.price and instance.offer_price > instance.price:
             instance.offer_price = instance.price
         instance.description = validated_data.get('description', instance.description)
         instance.save()
