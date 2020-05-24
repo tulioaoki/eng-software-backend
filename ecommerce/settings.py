@@ -82,14 +82,16 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+DATABASES = {'default': dj_database_url.config(default='postgres://qrlqqalanvhgid:aff0a458d824c15bfc3feaae3a44f081acba5a48926b9b21b1211fdf4d73a306@ec2-3-91-112-166.compute-1.amazonaws.com:5432/d16gb8mk1l00gn')}
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
+"""
 """
 DATABASES = {
     'default': {
@@ -102,6 +104,9 @@ DATABASES = {
     }
 }
 """
+
+#HEROKU
+#DATABASE_URL='postgres://qrlqqalanvhgid:aff0a458d824c15bfc3feaae3a44f081acba5a48926b9b21b1211fdf4d73a306@ec2-3-91-112-166.compute-1.amazonaws.com:5432/d16gb8mk1l00gn'
 
 
 # Password validation
