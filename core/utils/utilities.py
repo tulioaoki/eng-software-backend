@@ -144,7 +144,6 @@ def custom_filter(objects, request, type=None):
         categories=[]
         if 'categories' in data.keys():
             categories = data.pop('categories')
-        print(categories[0])
         if categories:
             objects = objects.filter(categories__in=literal_eval(categories[0]))
         if 'limit' in data.keys():
