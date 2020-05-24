@@ -5,6 +5,7 @@ from django.contrib.postgres.search import SearchVector, SearchQuery
 from rest_framework.views import exception_handler
 from rest_framework.exceptions import APIException
 from core.produto.models import Product
+from ast import literal_eval
 
 filterable_foreign_keys = (
 
@@ -143,8 +144,9 @@ def custom_filter(objects, request, type=None):
         categories=[]
         if 'categories' in data.keys():
             categories = data.pop('categories')
+        print(categories[0])
         if categories:
-            objects = objects.filter(categories__in=categories)
+            objects = objects.filter(categories__in=literal_eval(categories[0]))
         if 'limit' in data.keys():
             limit = data.pop('limit')
         if 'order' in data.keys():
@@ -163,6 +165,7 @@ def custom_filter(objects, request, type=None):
         for keys in data.keys():
                 kwargs[str(keys)] = str(get_data[keys])
                 kwargs.pop('page', None)
+                kwargs.pop('categories', None)
                 kwargs.pop('page_size', None)
                 objects = objects.filter(**kwargs)
 
