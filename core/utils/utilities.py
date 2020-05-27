@@ -145,7 +145,7 @@ def custom_filter(objects, request, type=None):
         if 'categories' in data.keys():
             categories = data.pop('categories')
         if categories:
-            objects = objects.filter(categories__in=literal_eval(categories[0]))
+            objects = objects.filter(categories__in=literal_eval(categories[0])).distinct()
         if 'limit' in data.keys():
             limit = data.pop('limit')
         if 'order' in data.keys():
@@ -179,6 +179,7 @@ def custom_filter(objects, request, type=None):
              limita o numero de objetos a serem retornados de acordo com o solicitado
             """
             objects = objects.all()[:int(limit)]
+        print(objects)
         return objects
     except FieldError:
         return objects
