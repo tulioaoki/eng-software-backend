@@ -30,7 +30,7 @@ class Product(models.Model):
     offer_price = models.FloatField(default=None, null=True, blank=True)
     images = models.ManyToManyField('ProductImage')
     categories = models.ManyToManyField(to=Category, blank=True)
-    offer = models.BooleanField(default=False, null=False, blank=False)
+    offer = models.BooleanField(default=False, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

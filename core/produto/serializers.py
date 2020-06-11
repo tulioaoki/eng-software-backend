@@ -44,7 +44,8 @@ class ProductSerializer(serializers.ModelSerializer):
         if product and categories_data:
             for c in categories_data:
                 category = get_category(c)
-                product.categories.add(category)
+                if category is not None:
+                    product.categories.add(category)
         if product and images is not None:
             for i in images:
                 img = ProductImageSerializer.create(ProductImageSerializer(), validated_data=i)
