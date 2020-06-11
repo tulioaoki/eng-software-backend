@@ -1,12 +1,13 @@
-from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import PermissionDenied, FieldError
-from django.db.models import CharField, TextField, Func, Q
-from django.contrib.postgres.search import SearchVector, SearchQuery
-from django.db.models.query import QuerySet
-from rest_framework.views import exception_handler
-from rest_framework.exceptions import APIException
-from core.produto.models import Product
 from ast import literal_eval
+
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.postgres.search import SearchVector, SearchQuery
+from django.core.exceptions import PermissionDenied, FieldError
+from django.db.models.query import QuerySet
+from rest_framework.exceptions import APIException
+from rest_framework.views import exception_handler
+
+from core.produto.models import Product
 
 filterable_foreign_keys = (
 
@@ -14,7 +15,6 @@ filterable_foreign_keys = (
 
 def paginated_response_dict(objects, request):
     if request and (objects or type(objects) == QuerySet):
-        print(len(objects))
         if(len(objects) == 0):
             return {'objects': [], 'page': 1, "item_count": 0}
         get_data = request.query_params  # or request.GET check both
@@ -183,7 +183,6 @@ def custom_filter(objects, request, type=None):
              limita o numero de objetos a serem retornados de acordo com o solicitado
             """
             objects = objects.all()[:int(limit)]
-        print(objects)
         return objects
     except FieldError:
         return objects
