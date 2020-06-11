@@ -21,7 +21,12 @@ class Produtos(APIView):
         items = self.get_objects(request)
         pagination_data = paginated_response_dict(items, request)
         if pagination_data is None:
-            raise ObjectNotFound
+            Response(default_response(code='get.product.success',
+                                      success=True,
+                                      data=[],
+                                      message="Produto retornado com sucesso.",
+                                      pagination_data=None,
+                                      ), status=status.HTTP_200_OK)
         serializer = ProductSerializer(pagination_data.get('objects'), many=True)
         return Response(default_response(code='get.product.success',
                                          success=True,

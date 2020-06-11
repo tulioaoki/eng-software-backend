@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied, FieldError
 from django.db.models import CharField, TextField, Func, Q
 from django.contrib.postgres.search import SearchVector, SearchQuery
+from django.db.models.query import QuerySet
 from rest_framework.views import exception_handler
 from rest_framework.exceptions import APIException
 from core.produto.models import Product
@@ -12,7 +13,10 @@ filterable_foreign_keys = (
 )
 
 def paginated_response_dict(objects, request):
-    if request and objects:
+    if request and (objects or type(objects) == QuerySet):
+        print(len(objects))
+        if(len(objects) == 0):
+            return {'objects': [], 'page': 1, "item_count": 0}
         get_data = request.query_params  # or request.GET check both
         data = get_data
         data._mutable = True
@@ -43,7 +47,7 @@ def default_response(code, message, success, data=None,status_code=None ,paginat
     objects = pagination_data.get('objects')
     page = pagination_data.get('page') if pagination_data.get('page') else 1
     page_size = len(objects) if objects else (len(data) if type(data) == 'list' else 1)
-    item_count = pagination_data.get('item_count') if pagination_data.get('item_count') else  (len(data) if type(data) == 'list' else 1)
+    item_count = pagination_data.get('item_count') if pagination_data.get('item_count') is not None else (len(data) if type(data) == 'list' else 1)
     if success:
         return{
                 'code':code,
