@@ -42,7 +42,6 @@ class ProductSerializer(serializers.ModelSerializer):
             offer_price=validated_data.get('offer_price')
         )
         if product and categories_data:
-            print(categories_data)
             for c in categories_data:
                 category = get_category(c)
                 if category is not None:
@@ -54,30 +53,6 @@ class ProductSerializer(serializers.ModelSerializer):
         product.save()
         return product
 
-    def update(self, instance, validated_data):
-        categories_data = validated_data.get('categories')
-        images = validated_data.get('images')
-        if categories_data:
-            request_categories = []
-            for c in categories_data:
-                category = get_category(c.get('id'))
-                request_categories.append(category)
-                if category in instance.categories.all():
-                    pass
-                else:
-                    instance.categories.add(category)
-            for k in instance.categories.all():
-                if k not in request_categories:
-                    instance.categories.remove(k)
-
-        instance.name = validated_data.get('name', instance.name)
-        instance.offer = validated_data.get('offer', instance.offer)
-        instance.offer_price = validated_data.get('offer_price', instance.offer_price)
-        instance.quantity = validated_data.get('quantity', instance.quantity)
-        instance.price = validated_data.get('price', instance.price)
-        instance.description = validated_data.get('description', instance.description)
-        instance.save()
-        return instance
 
 
 def get_category(category):
@@ -86,16 +61,21 @@ def get_category(category):
     except Category.DoesNotExist:
         return None
 
+def get_image(image_id):
+    try:
+        return Category.objects.get(pk=image_id)
+    except Category.DoesNotExist:
+        return None
 
 class ProductEditSerializer(serializers.ModelSerializer):
     categories = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(),many=True, read_only=False,)
-    images = ProductImageSerializer(read_only=True, many=True)
+    images = ProductImageSerializer(read_only=False, many=True)
 
     class Meta:
         model = Product
 
-        fields = ["id", "images","offer","offer_price", "name", "description", "quantity", "price", "categories", "created_at",
-                  "updated_at", ]
+        fields = ["id", "images","offer","offer_price", "name", "description",
+                  "quantity", "price", "categories", "created_at", "updated_at", ]
 
     def update(self, instance, validated_data):
         categories_data = validated_data.get('categories')
@@ -111,6 +91,23 @@ class ProductEditSerializer(serializers.ModelSerializer):
             for k in instance.categories.all():
                 if k not in request_categories:
                     instance.categories.remove(k)
+
+        if images:
+            request_images = []
+            for i in images:
+                id = i.get('id')
+                if id is None:
+                    image = ProductImageSerializer.create(ProductImageSerializer(), validated_data=i)
+                else:
+                    image = get_image(id)
+                request_images.append(image)
+                if image in instance.categories.all():
+                    pass
+                else:
+                    instance.images.add(image)
+            for k in instance.images.all():
+                if k not in request_images:
+                    instance.images.remove(k)
 
         instance.name = validated_data.get('name', instance.name)
         instance.offer = validated_data.get('offer', instance.offer)
