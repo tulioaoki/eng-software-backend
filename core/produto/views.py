@@ -46,10 +46,11 @@ class Produtos(APIView):
                                                  data={'detail':data},
                                                  )
                                 ,status=status.HTTP_400_BAD_REQUEST)
+            data = Product.objects.get(pk=data.id)
             return Response(default_response(code='create.product.success',
                                          success=True,
                                          message='Produto retornado com sucesso.',
-                                         data=serializers.serialize('json', [data, ]),
+                                         data=ProductSerializer(data).data,
                                          ), status=status.HTTP_201_CREATED,)
         return Response(default_response(code='get.product.error',
                                          success=False,

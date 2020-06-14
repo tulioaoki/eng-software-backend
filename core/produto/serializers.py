@@ -42,6 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
             offer_price=validated_data.get('offer_price')
         )
         if product and categories_data:
+            print(categories_data)
             for c in categories_data:
                 category = get_category(c)
                 if category is not None:
