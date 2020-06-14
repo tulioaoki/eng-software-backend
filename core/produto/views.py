@@ -24,7 +24,7 @@ class Produtos(APIView):
             Response(default_response(code='get.product.success',
                                       success=True,
                                       data=[],
-                                      message="Produto retornado com sucesso.",
+                                      message="Lista vazia.",
                                       pagination_data=None,
                                       ), status=status.HTTP_200_OK)
         serializer = ProductSerializer(pagination_data.get('objects'), many=True)
@@ -251,3 +251,33 @@ class OfferDetail(APIView):
         to_be_deleted = self.get_object(pk)
         to_be_deleted.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProdutosRecentes(APIView):
+    permission_classes = (AllowAny,)
+    http_method_names = ['get',]
+
+    def get_objects(self, request):
+        from datetime import datetime, timedelta
+        last_month = datetime.today() - timedelta(days=30)
+        objects = Product.objects.filter(created_at__gte=last_month).order_by('-created_at')
+        obj = custom_filter(objects, request)
+        return obj
+
+    def get(self, request, format=None):
+        items = self.get_objects(request)
+        pagination_data = paginated_response_dict(items, request)
+        if pagination_data is None:
+            Response(default_response(code='get.product.success',
+                                      success=True,
+                                      data=[],
+                                      message="Lista Vazia.",
+                                      pagination_data=None,
+                                      ), status=status.HTTP_200_OK)
+        serializer = ProductSerializer(pagination_data.get('objects'), many=True)
+        return Response(default_response(code='get.product.success',
+                                         success=True,
+                                         data=serializer.data,
+                                         message="Produto retornado com sucesso.",
+                                         pagination_data=pagination_data,
+                                         ), status=status.HTTP_200_OK)
