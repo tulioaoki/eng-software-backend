@@ -48,7 +48,7 @@ class OrderView(APIView):
             return Response(default_response(code='create.order.success',
                                          success=True,
                                          message='Order retornado com sucesso.',
-                                         data=OrderSerializer(data=data),
+                                         data=OrderSerializer(data=data).data,
                                          ), status=status.HTTP_201_CREATED,)
         return Response(default_response(code='get.order.error',
                                          success=False,
