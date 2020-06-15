@@ -1,4 +1,5 @@
 from django.core import serializers
+from django.db.models import Count
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -272,6 +273,34 @@ class ProdutosRecentes(APIView):
                                       success=True,
                                       data=[],
                                       message="Lista Vazia.",
+                                      pagination_data=None,
+                                      ), status=status.HTTP_200_OK)
+        serializer = ProductSerializer(pagination_data.get('objects'), many=True)
+        return Response(default_response(code='get.product.success',
+                                         success=True,
+                                         data=serializer.data,
+                                         message="Produto retornado com sucesso.",
+                                         pagination_data=pagination_data,
+                                         ), status=status.HTTP_200_OK)
+
+
+class ProdutosBestSellers(APIView):
+    permission_classes = (AllowAny,)
+    http_method_names = ['get', 'post',]
+
+    def get_objects(self, request):
+        objects = Product.objects.order_by('-times_bought')[:8]
+        obj = custom_filter(objects, request)
+        return obj
+
+    def get(self, request, format=None):
+        items = self.get_objects(request)
+        pagination_data = paginated_response_dict(items, request)
+        if pagination_data is None:
+            Response(default_response(code='get.product.success',
+                                      success=True,
+                                      data=[],
+                                      message="Lista vazia.",
                                       pagination_data=None,
                                       ), status=status.HTTP_200_OK)
         serializer = ProductSerializer(pagination_data.get('objects'), many=True)

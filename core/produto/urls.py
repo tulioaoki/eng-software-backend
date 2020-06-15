@@ -4,10 +4,11 @@ from django.conf.urls.static import static
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from core.produto.views import Produtos, ProdutoDetail, ProductImageView, ProductImageDetail, OfferDetail, \
-    OfferView, ProdutosRecentes
+    OfferView, ProdutosRecentes, ProdutosBestSellers
 
 urlpatterns = [
     url(r'^products$', Produtos.as_view()),
+    url(r'^products/best_sellers$', ProdutosBestSellers.as_view()),
     url(r'^products/recent$', ProdutosRecentes.as_view()),
     url(r'^products/(?P<pk>[0-9]+)$', ProdutoDetail.as_view()),
     url(r'^products-images$', ProductImageView.as_view()),

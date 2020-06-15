@@ -34,6 +34,7 @@ class Product(models.Model):
     images = models.ManyToManyField('ProductImage')
     categories = models.ManyToManyField(to=Category, blank=True)
     offer = models.BooleanField(default=False, null=True, blank=True)
+    times_bought = models.IntegerField(default=0, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

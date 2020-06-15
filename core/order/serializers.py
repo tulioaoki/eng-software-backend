@@ -21,7 +21,10 @@ class OrderSerializer(serializers.ModelSerializer):
         if order and items is not None:
             for i in items:
                 item = ItemProductSerializer.create(ItemProductSerializer(), validated_data=i)
+                p = item.product
+                p.times_bought = p.times_bought + item.quantity
                 order.purchases.add(item)
+                p.save()
         order.save()
         return order
 
