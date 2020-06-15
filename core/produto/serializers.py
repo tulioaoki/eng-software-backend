@@ -28,13 +28,16 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         
-        fields = ["id", "images", "offer", "offer_price", "name", "description", "quantity", "price", "categories", "created_at", "updated_at",]
+        fields = ["id", "images", "offer", "offer_price", "name", "description","peso","unidade","marca" ,"quantity", "price", "categories", "created_at", "updated_at",]
 
     def create(self, validated_data):
         categories_data = validated_data.get('categories')
         images = validated_data.get('images')
         product = Product.objects.create(
             name=validated_data.get('name'),
+            peso=validated_data.get('peso'),
+            unidade=validated_data.get('unidade'),
+            marca=validated_data.get('marca'),
             description=validated_data.get('description'),
             quantity=validated_data.get('quantity'),
             price=validated_data.get('price'),
@@ -61,11 +64,13 @@ def get_category(category):
     except Category.DoesNotExist:
         return None
 
+
 def get_image(image_id):
     try:
         return Category.objects.get(pk=image_id)
     except Category.DoesNotExist:
         return None
+
 
 class ProductEditSerializer(serializers.ModelSerializer):
     categories = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(),many=True, read_only=False,)
@@ -74,7 +79,7 @@ class ProductEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
 
-        fields = ["id", "images","offer","offer_price", "name", "description",
+        fields = ["id", "images","offer","offer_price", "name", "description", "peso","unidade","marca"
                   "quantity", "price", "categories", "created_at", "updated_at", ]
 
     def update(self, instance, validated_data):
@@ -117,5 +122,8 @@ class ProductEditSerializer(serializers.ModelSerializer):
         if instance.offer_price and instance.price and instance.offer_price > instance.price:
             instance.offer_price = instance.price
         instance.description = validated_data.get('description', instance.description)
+        instance.peso = validated_data.get('peso', instance.peso)
+        instance.unidade = validated_data.get('unidade', instance.unidade)
+        instance.marca = validated_data.get('marca', instance.marca)
         instance.save()
         return instance
