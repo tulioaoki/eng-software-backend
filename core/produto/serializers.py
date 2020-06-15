@@ -79,7 +79,7 @@ class ProductEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
 
-        fields = ["id", "images","offer","offer_price", "name", "description", "peso","unidade","marca"
+        fields = ["id", "images","offer","offer_price", "name", "description", "peso","unidade","marca",
                   "quantity", "price", "categories", "created_at", "updated_at", "times_bought" ]
 
     def update(self, instance, validated_data):
