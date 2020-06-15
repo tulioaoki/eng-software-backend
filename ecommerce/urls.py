@@ -4,6 +4,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^', include('core.produto.urls')),
     url(r'^', include('core.purchases.urls')),
+    url(r'^', include('core.order.urls')),
     url(r'^', include('core.categoria.urls')),
     url(r'^', include('core.carrosel.urls')),
     url(r'^', include('core.user.urls')),

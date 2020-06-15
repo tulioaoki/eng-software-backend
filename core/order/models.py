@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from core.purchases.models import ItemProduct
+from ecommerce import settings
 
 
 class Order(models.Model):
@@ -21,7 +22,7 @@ class Order(models.Model):
         return self.id
 
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.DO_NOTHING)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Cliente',  null=False, blank=False, on_delete=models.DO_NOTHING)
     purchases = models.ManyToManyField(ItemProduct)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

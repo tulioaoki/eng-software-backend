@@ -4,10 +4,11 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from core.carrosel.views import *
+from core.order.views import OrderView, OrderDetail
 
 urlpatterns = [
-    url(r'^carrosel$', CarroselView.as_view()),
-    url(r'^carrosel/(?P<pk>[0-9]+)$', CarroselDetail.as_view()),
+    url(r'^order', OrderView.as_view()),
+    url(r'^order/(?P<pk>[0-9]+)$', OrderDetail.as_view()),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

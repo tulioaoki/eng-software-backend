@@ -1,48 +1,32 @@
 from rest_framework import serializers
 
-from core.carrosel.models import Carrosel, Image
+from core.order.models import Order
+from core.purchases.serializers import ItemProductSerializer
 
 
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = ["id", "url", "base_64", "created_at", "updated_at", ]
-
-    def create(self, validated_data):
-        image = Image.objects.create(
-            url=validated_data.get('url'),
-            base_64=validated_data.get('base_64'),
-        )
-        return image
-
-    def update(self, instance, validated_data):
-        instance.image_url = validated_data.get('image_url', instance.image_url)
-        instance.base_64 = validated_data.get('base_64', instance.base_64)
-        instance.save()
-        return instance
-
-class CarroselSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(read_only=True, many=True)
+class OrderSerializer(serializers.ModelSerializer):
+    purchases = ItemProductSerializer(read_only=False,many=True)
+    owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
-        model = Carrosel
+        model = Order
         fields = '__all__'
 
-    def create(self, validated_data):
-        images = validated_data.get('images')
-        carrosel = Carrosel.objects.create(
-            name=validated_data.get('name'),
+    def create(self, validated_data, user=None):
+        items = validated_data.get('purchases')
+        order = Order.objects.create(
+            owner=user,
         )
 
-        if carrosel and images is not None:
-            for i in images:
-                img = ImageSerializer.create(ImageSerializer(), validated_data=i)
-                carrosel.images.add(img)
-        carrosel.save()
-        return carrosel
+        if order and items is not None:
+            for i in items:
+                item = ItemProductSerializer.create(ItemProductSerializer(), validated_data=i)
+                order.purchases.add(item)
+        order.save()
+        return order
 
     def update(self, instance, validated_data):
-        instance.images = validated_data.get('images', instance.image_url)
+        instance.items = validated_data.get('items', instance.image_url)
         instance.save()
         return instance
 
