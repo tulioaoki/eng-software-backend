@@ -1,3 +1,6 @@
+import json
+
+from django.core import serializers
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -45,10 +48,12 @@ class OrderView(APIView):
                                                  data={'detail':data},
                                                  )
                                 ,status=status.HTTP_400_BAD_REQUEST)
+            tmpJson = serializers.serialize("json", [data,])
+            tmpObj = json.loads(tmpJson)
             return Response(default_response(code='create.order.success',
                                          success=True,
                                          message='Order retornado com sucesso.',
-                                         data=OrderSerializer(data=data).data,
+                                         data=json.dumps(tmpObj),
                                          ), status=status.HTTP_201_CREATED,)
         return Response(default_response(code='get.order.error',
                                          success=False,
