@@ -23,7 +23,7 @@ class CustomLogin(ObtainAuthToken,APIView,):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        data = {'token': token.key,'user':user.username}
+        data = {'token': token.key,'user':user.username, 'is_admin':(user.is_superuser or user.is_admin)}
         return Response(default_response(code='post.login.success',
                                          success=True,
                                          message='Login realizado com sucesso.',
@@ -97,13 +97,19 @@ class CheckAuth(APIView):
 
     def get(self, request, format=None):
         # checks if the token exists and is valid
-        token = request.user.auth_token
+        user = request.user
+        token = user.auth_token
         if Token and token in Token.objects.all():
-            return Response(default_response(code='get.logout.success',
+            return Response(default_response(code='get.auth.success',
                                              success=True,
-                                             message='Logout realizado com sucesso.',
-                                             data={"data":"Ok"},
+                                             message='Autenticado',
+                                             data={"logged":"ok", 'is_admin':(user.is_superuser or user.is_admin)},
                                              ), status=status.HTTP_200_OK)
-
+        else:
+            return Response(default_response(code='get.auth.fail',
+                                             success=True,
+                                             message='fail',
+                                             data={"logged": False, 'is_admin': (user.is_superuser or user.is_admin)},
+                                             ), status=status.HTTP_404_NOT_FOUND)
 
 
